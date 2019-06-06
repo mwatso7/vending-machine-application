@@ -60,6 +60,7 @@ public class VendingMachineCLI {
  ********************************************************************************************************/
 	public static void displayItems() {      // static attribute used as method is not associated with specific object instance
 		// Code to display items in Vending Machine
+		VendingMachine vend = new VendingMachine();
 	}
 	
 	public static void purchaseItems() {	 // static attribute used as method is not associated with specific object instance
