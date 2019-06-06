@@ -9,7 +9,12 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class VendingMachine {
+	
 	private Map<String, Product> products = new HashMap<String, Product>();
+	
+	/*
+	 * Constructors -- build map from text file
+	 */
 	
 	public VendingMachine() {
 		String inventoryFileName ="vendingmachine.txt";
@@ -24,13 +29,14 @@ public class VendingMachine {
 				i++;
 				
 				
-			}/*
+			}
+			/*
 			for (String prod : products.keySet()) {
 				System.out.println(products.get(prod));
 			}*/
 			
 		}catch(IOException exception) {
-		
+			System.out.println("Unable to read from file" + exception);
 		}
 	}
 }
