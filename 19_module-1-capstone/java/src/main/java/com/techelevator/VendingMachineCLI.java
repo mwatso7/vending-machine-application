@@ -81,12 +81,13 @@ public class VendingMachineCLI {
 			case 2:
 				vend.selectProduct();
 				break;
-			//case 3;
-				//vend.finishTransaction();
+			case 3:
+				vend.finishTransaction();
+				break;
 			
 			
 		}
-		vend.feedMoney();// static attribute used as method is not associated with specific object instance
+		//vend.feedMoney();// static attribute used as method is not associated with specific object instance
 		// Code to purchase items from Vending Machine
 	}
 	
