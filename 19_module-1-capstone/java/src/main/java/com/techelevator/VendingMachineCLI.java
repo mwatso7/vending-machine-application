@@ -18,10 +18,13 @@ public class VendingMachineCLI {
 													    MAIN_MENU_OPTION_EXIT
 													    };
 	
+	private static VendingMachine vend = new VendingMachine();
+	
 	private Menu vendingMenu;              // Menu object to be used by an instance of this class
 	
 	public VendingMachineCLI(Menu menu) {  // Constructor - user will pas a menu for this class to use
-		this.vendingMenu = menu;           // Make the Menu the user object passed, our Menu
+		this.vendingMenu = menu;    
+		// Make the Menu the user object passed, our Menu
 	}
 	/**************************************************************************************************************************
 	*  VendingMachineCLI main processing loop
@@ -30,6 +33,8 @@ public class VendingMachineCLI {
 	***************************************************************************************************************************/
 
 	public void run() {
+		
+		
 
 		boolean shouldProcess = true;         // Loop control variable
 		
@@ -60,7 +65,7 @@ public class VendingMachineCLI {
  ********************************************************************************************************/
 	public static void displayItems() {      // static attribute used as method is not associated with specific object instance
 		// Code to display items in Vending Machine
-		VendingMachine vend = new VendingMachine();
+		vend.displayProducts();
 	}
 	
 	public static void purchaseItems() {	 // static attribute used as method is not associated with specific object instance

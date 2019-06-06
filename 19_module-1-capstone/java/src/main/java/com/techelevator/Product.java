@@ -20,6 +20,10 @@ public class Product {
 		this.name = name;
 	}
 	
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -30,6 +34,10 @@ public class Product {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public int getStock() {
+		return stock;
 	}
 	
 	public String getType() {
