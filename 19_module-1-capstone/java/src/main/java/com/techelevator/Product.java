@@ -21,7 +21,8 @@ public class Product {
 	}
 	
 	public void setStock(int stock) {
-		this.stock = stock;
+		
+		this.stock = (stock > 0) ? stock:0;
 	}
 	
 	public void setType(String type) {
@@ -50,5 +51,8 @@ public class Product {
 	
 	public String toString(){
 		return name + ", " + cost + ", " + type + ", " + stock;
+	}
+	private void updateStock(String index) {
+		//selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(), products.get(index).getType(), selections.get(index).getStock() - 1));
 	}
 }

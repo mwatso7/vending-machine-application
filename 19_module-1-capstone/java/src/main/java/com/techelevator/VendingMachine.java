@@ -13,6 +13,7 @@ public class VendingMachine {
 	
 	private Map<String, Product> products = new TreeMap<String, Product>();
 	private Map<String, Product> selections = new TreeMap<String, Product>();
+	private double moneyTendered = 0;
 	
 	/*
 	 * Constructors -- build map from text file
@@ -54,19 +55,23 @@ public class VendingMachine {
 			
 			//System.out.println(products.get(prod));
 		}
-		Scanner input = new Scanner(System.in);
-		System.out.println("Please select a product using A1-D4: ");
-		selectProduct(input.nextLine());
+		
 		
 	}
 	
-	public void selectProduct(String index) {
-		if(selections.containsKey(index)) {
-			selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(), products.get(index).getType(), selections.get(index).getStock() + 1));
-			
+	public void selectProduct() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Please select a product using A1-D4: ");
+		String index = input.nextLine();
+		
+		if(selections.containsKey(index) && products.get(index).getStock() > 0) {
+			//selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(), products.get(index).getType(), selections.get(index).getStock() + 1));
+			selections.get(index).setStock(selections.get(index).getStock() + 1);
+			products.get(index).setStock(products.get(index).getStock()-1);
 
-		} else {
+		} else if(products.get(index).getStock() > 0){ 
 			selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(), products.get(index).getType(), 1));
+			products.get(index).setStock(products.get(index).getStock()-1);;
 		}
 		for (String prod : selections.keySet()) {
 			
@@ -74,7 +79,17 @@ public class VendingMachine {
 		
 	}
 	}
-	private void updateStock(String index) {
-		selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(), products.get(index).getType(), selections.get(index).getStock() - 1);
+	
+	
+	public void feedMoney() {
+		System.out.println("Please feed money in increments (1, 2, 5, 10): ");
+		Scanner feeder = new Scanner(System.in);
+		String dollaBill = feeder.nextLine();
+		moneyTendered += Double.parseDouble(dollaBill);
 	}
+	
+	public void finishTransaction() {
+		
+	}
+	
 }
