@@ -65,9 +65,6 @@ public class VendingMachine {
 		String index = input.nextLine();
 
 		if (selections.containsKey(index) && products.get(index).getStock() > 0) {
-			// selections.put(index, new Product(products.get(index).getName(),
-			// products.get(index).getCost(), products.get(index).getType(),
-			// selections.get(index).getStock() + 1));
 			selections.get(index).setStock(selections.get(index).getStock() + 1);
 			products.get(index).setStock(products.get(index).getStock() - 1);
 			vendingMachineLogger
@@ -184,13 +181,25 @@ public class VendingMachine {
 	public void salesReport() {
 		File salesFile = new File("Sales_Report.txt");
 		Map<String, Integer> sales = new TreeMap<String, Integer>();
+		double totalSales = 0;
+		
 		try (Scanner reader = new Scanner(salesFile)) {
 
 			while (reader.hasNextLine()) {
-				String[] report = reader.nextLine().split(",");
+				String rline= reader.nextLine();
+				if (rline.equals("")) {
+					continue;
+				}
+				if (rline.startsWith("**TOTAL SALES**")) {
+					String[] report = rline.split(" ");
+					totalSales = Double.parseDouble(report[2].substring(1));
+					continue;
+				}
+				String[] report = rline.split(",");
 				sales.put(report[0], Integer.parseInt(report[1]));
 		
 			}
+			System.out.println(totalSales);
 
 			
 
@@ -210,6 +219,8 @@ public class VendingMachine {
 				writer.println(prod + "," + sales.get(prod));
 				
 			}
+			totalSales += runningBalance;
+			writer.printf("\n**TOTAL SALES** $%.2f", totalSales);
 			writer.close();
 		} catch (FileNotFoundException e) {
 		
