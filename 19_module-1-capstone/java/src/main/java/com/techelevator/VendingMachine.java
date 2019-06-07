@@ -3,6 +3,7 @@ package com.techelevator;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,14 +14,17 @@ public class VendingMachine {
 	
 	private Map<String, Product> products = new TreeMap<String, Product>();
 	private Map<String, Product> selections = new TreeMap<String, Product>();
+	private final String inventoryFileName ="vendingmachine.txt";
 	private double moneyTendered = 0;
+	
+	private Logger vendingMachineLogger = new Logger();
 	
 	/*
 	 * Constructors -- build map from text file
 	 */
 	
 	public VendingMachine() {
-		String inventoryFileName ="vendingmachine.txt";
+		
 		File inventory = new File(inventoryFileName);
 		int i = 0;
 		try(Scanner feeder = new Scanner(inventory)){
@@ -80,9 +84,14 @@ public class VendingMachine {
 	
 	public void feedMoney() {
 		System.out.println("Please feed money in increments (1, 2, 5, 10): ");
+		
 		Scanner feeder = new Scanner(System.in);
 		String dollaBill = feeder.nextLine();
+		double currentBalance = Double.parseDouble(dollaBill);
 		moneyTendered += Double.parseDouble(dollaBill);
+		LocalDateTime currentDate = LocalDateTime.now();
+		
+		vendingMachineLogger.logMessage(String.format("FEED MONEY: $%.2f" + "\t$%.2f", currentBalance, moneyTendered));
 	}
 	
 	public void finishTransaction() {
@@ -118,9 +127,12 @@ public class VendingMachine {
 			nickels = cents.divide(new BigDecimal(5.00));
 			cents = cents.subtract(nickels.multiply(new BigDecimal(5.00)));
 		}*/
-		//System.out.println(change);
-		int coins = (int)(change*100) + 1;
-		//System.out.println(coins);
+		
+
+		int coins = (Double.parseDouble(Integer.toString((int)(change*100))) == change*100.0) ? (int)(change*100) : (int)(change*100) + 1;
+		System.out.println(change*100.0);
+		System.out.println((int)(change*100));
+		System.out.println(coins);
 		int quarters = 0;
 		int dimes = 0;
 		int nickels = 0;
@@ -129,7 +141,7 @@ public class VendingMachine {
 	    dimes = (int)(coins/10);
 	    coins %= 10;
 	    nickels = (int)(coins/5);
-	    coins %= 5;
+	    // coins %= 5;
 
 		return quarters + " Quarters, " + dimes + " Dimes, " + nickels + " Nickels";
 	    
