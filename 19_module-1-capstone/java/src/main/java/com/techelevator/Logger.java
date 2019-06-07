@@ -2,7 +2,9 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +13,7 @@ public class Logger {
 	
 	
 	private final LocalDateTime currentDate = LocalDateTime.now();
-	private final String fileName = "vending_log_" + currentDate + ".txt";
+	//private final String fileName = "vending_log_" + currentDate + ".txt";
 	private List<String> loggedMessages = new ArrayList<String>();
 	
 	
@@ -26,16 +28,17 @@ public class Logger {
 	}
 	
 	public void printToLogFile() {
+		DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+		String fileName = ("log_" + currentDate.format(formatDate) + ".txt");
 		File logFile = new File(fileName);
-		 try(Scanner feeder = new Scanner(logFile)){
+		 try(PrintWriter writer = new PrintWriter(logFile)){
 				
-				while(feeder.hasNextLine()) {
+				for(String msg : loggedMessages) {
 					
-					String[] item = feeder.nextLine().split(",");
-					//products.put(item[0], new Product(item[1], Double.parseDouble(item[2]), item[3], 5));
+					writer.println(msg);
 					
 				}
-				
+				writer.close();
 				/*
 				for (String prod : products.keySet()) {
 					System.out.println(products.get(prod));

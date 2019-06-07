@@ -95,3 +95,4 @@ public class VendingMachineCLI {
 		// Any processing that needs to be done before method ends
 	}
 }
+
