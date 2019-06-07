@@ -48,13 +48,14 @@ public class VendingMachine {
 	}
 
 	public void displayProducts() {
-		int i = 1;
+		int i = 0;
 		for (String prod : products.keySet()) {
 			if (i % 4 == 0) {
 				System.out.println();
 			}
 			i++;
-			System.out.printf("%s%s%-25s", prod, products.get(prod).getName(), products.get(prod).getCost());
+			System.out.printf("%s", prod + " " + products.get(prod).getName() + " $" + products.get(prod).getCost() + " (" + products.get(prod).getStock() + ")");
+			System.out.println();
 
 		}
 	}
@@ -63,8 +64,15 @@ public class VendingMachine {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Please select a product using A1-D4: ");
 		String index = input.nextLine();
+		
+		if(!products.containsKey(index)) {
+			System.out.println("This product does not exist: ");
+		}
+		else if(products.get(index).getStock() == 0) {
+			System.out.println("Item is out of stock. Sorry :( ");
+		}
 
-		if (selections.containsKey(index) && products.get(index).getStock() > 0) {
+		else if (selections.containsKey(index) && products.get(index).getStock() > 0) {
 			selections.get(index).setStock(selections.get(index).getStock() + 1);
 			products.get(index).setStock(products.get(index).getStock() - 1);
 			vendingMachineLogger
@@ -82,19 +90,18 @@ public class VendingMachine {
 							runningBalance, +(runningBalance - selections.get(index).getCost())));
 			runningBalance -= (selections.get(index).getCost());
 		}
-		for (String prod : selections.keySet()) {
-
-			System.out.printf("%s%s%s%-25s", prod, selections.get(prod).getName(), selections.get(prod).getCost(),
-					Integer.toString(selections.get(prod).getStock()));
-
-		}
 	}
 
 	public void feedMoney() {
 		System.out.println("Please feed money in increments (1, 2, 5, 10): ");
+		
 
 		Scanner feeder = new Scanner(System.in);
 		String dollaBill = feeder.nextLine();
+		if(!dollaBill.equals("1") && !dollaBill.equals("2") && !dollaBill.equals("5") && !dollaBill.equals("10")) {
+			System.out.println("Not a valid dollar amount. Try again.");
+			feedMoney(); return;
+		}
 		double currentTendered = Double.parseDouble(dollaBill);
 		moneyTendered += Double.parseDouble(dollaBill);
 		runningBalance += currentTendered;
@@ -125,19 +132,7 @@ public class VendingMachine {
 	}
 
 	private String makeChange(double change) {
-		/*
-		 * BigDecimal cents = new BigDecimal(change*100.00); BigDecimal quarters = new
-		 * BigDecimal(0.00); BigDecimal dimes = new BigDecimal(0.00); BigDecimal nickels
-		 * = new BigDecimal(0.00); if (cents.compareTo(new BigDecimal(25.00)) >= 0) {
-		 * quarters = cents.divide(new BigDecimal(25.00)); cents =
-		 * cents.subtract(quarters.multiply(new BigDecimal(25.00))); } if
-		 * (cents.compareTo(new BigDecimal(10.00)) >= 0) { dimes = cents.divide(new
-		 * BigDecimal(10.00)); cents = cents.subtract(dimes.multiply(new
-		 * BigDecimal(10.00))); } if (cents.compareTo(new BigDecimal(5.00)) >= 0) {
-		 * nickels = cents.divide(new BigDecimal(5.00)); cents =
-		 * cents.subtract(nickels.multiply(new BigDecimal(5.00))); }
-		 */
-
+	
 		int coins = (Double.parseDouble(Integer.toString((int) (change * 100))) == change * 100.0)
 				? (int) (change * 100)
 				: (int) (change * 100) + 1;
@@ -229,6 +224,9 @@ public class VendingMachine {
 		
 	
 
+	}
+	public double getMoneyTendered() {
+		return moneyTendered;
 	}
 
 }

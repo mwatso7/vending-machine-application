@@ -72,18 +72,20 @@ public class VendingMachineCLI {
 	
 	public static void purchaseItems() {
 		Scanner menuSelect = new Scanner(System.in);
-		System.out.print("(1) Feed Money \n" + "(2) Select Product \n" + "(3) Finish Transactions \n" + "Current Money Provided: " );
+		System.out.printf("(1) Feed Money \n(2) Select Product \n(3) Finish Transactions \nCurrent Money Provided: $%.2f\n", vend.getMoneyTendered());
 		String choices = menuSelect.nextLine();
-		switch(Integer.parseInt(choices)) {
-			case 1:
+		switch(choices) {
+			case "1":
 				vend.feedMoney();
 				break;
-			case 2:
+			case "2":
 				vend.selectProduct();
 				break;
-			case 3:
+			case "3":
 				vend.finishTransaction();
 				break;
+			default:
+				purchaseItems();
 			
 			
 		}
