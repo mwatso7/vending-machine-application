@@ -11,41 +11,37 @@ import java.util.Scanner;
 
 public class Logger {
 	
+	/*
+	 * Member Data
+	 */
 	
 	private final LocalDateTime currentDate = LocalDateTime.now();
-	//private final String fileName = "vending_log_" + currentDate + ".txt";
 	private List<String> loggedMessages = new ArrayList<String>();
 	
+	/*
+	 * Methods -- other
+	 */
 	
+	// add log message to list of messages
 	public void logMessage(String message) {
 		LocalDateTime logDate = LocalDateTime.now();
 		String messageToLog = logDate + " " + message;
 		loggedMessages.add(messageToLog);
-		for (String msg : loggedMessages) {
-			System.out.println(msg);
-		}
-			
 	}
 	
+	// print all logged messages to log file
 	public void printToLogFile() {
 		DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 		String fileName = ("log_" + currentDate.format(formatDate) + ".txt");
 		File logFile = new File(fileName);
-		 try(PrintWriter writer = new PrintWriter(logFile)){
-				
-				for(String msg : loggedMessages) {
-					
-					writer.println(msg);
-					
-				}
-				writer.close();
-				/*
-				for (String prod : products.keySet()) {
-					System.out.println(products.get(prod));
-				}*/
-				
-			}catch(IOException exception) {
-				System.out.println("Unable to read from file" + exception);
+		
+		try(PrintWriter writer = new PrintWriter(logFile)){
+			for(String msg : loggedMessages) {
+				writer.println(msg);	
 			}
+			writer.close();	
+		}catch(IOException exception) {
+			System.out.println("Unable to read from file" + exception);
+		}
 	}
 }
