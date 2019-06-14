@@ -89,7 +89,7 @@ public class VendingMachine {
 		else if(products.get(index).getStock() == 0) {
 			System.out.println("Item is out of stock. Sorry :(");
 		}
-		// Product was already selected; increase stock of selections by one
+		// Product was already selected; increase stock of selections by one. Subtract one from products stock.
 		else if (selections.containsKey(index)) {
 			// dispense product into selections
 			selections.get(index).setStock(selections.get(index).getStock() + 1);
@@ -194,7 +194,7 @@ public class VendingMachine {
 
 	}
 	
-	// Create sounds of customer eating his purchases because he/she is incapable?
+	// Create sounds of customer eating their purchase. Yum Yum.
 	private void productsConsumed() {
 		for (String prod : selections.keySet()) {
 			switch (selections.get(prod).getType()) {
@@ -225,15 +225,15 @@ public class VendingMachine {
 
 			while (reader.hasNextLine()) {
 				String rline= reader.nextLine();
-				if (rline.equals("")) {
-					continue;
+				if (rline.equals("")) { 
+					continue;//Accounting for a blank line followed by one with text (Total Sales line)
 				}
 				if (rline.startsWith("**TOTAL SALES**")) {
-					String[] report = rline.split(" ");
+					String[] report = rline.split(" ");// Splitting on spaces
 					totalSales = Double.parseDouble(report[2].substring(1));
 					continue;
 				}
-				String[] report = rline.split(",");
+				String[] report = rline.split(","); // Splitting on commas
 				sales.put(report[0], Integer.parseInt(report[1]));
 		
 			}
@@ -246,7 +246,7 @@ public class VendingMachine {
 				sales.put(selections.get(prod).getName(), sales.get(selections.get(prod).getName())+ selections.get(prod).getStock());
 			}	
 		}
-		// right updated totals to sale report
+		// write updated totals to sale report
 		try {
 			PrintWriter writer = new PrintWriter(salesFile);
 			for(String prod : sales.keySet()) {
