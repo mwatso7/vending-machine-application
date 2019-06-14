@@ -77,17 +77,17 @@ public class VendingMachineCLI {
 		switch(choices) {
 			case "1":
 				vend.feedMoney();
+				purchaseItems();
 				break;
 			case "2":
 				vend.selectProduct();
+				purchaseItems();
 				break;
 			case "3":
 				vend.finishTransaction();
 				break;
 			default:
-				purchaseItems();
-			
-			
+				purchaseItems();	
 		}
 		//vend.feedMoney();// static attribute used as method is not associated with specific object instance
 		// Code to purchase items from Vending Machine

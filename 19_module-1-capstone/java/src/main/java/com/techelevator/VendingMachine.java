@@ -79,7 +79,7 @@ public class VendingMachine {
 	public void selectProduct() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Please select a product using A1-D4: ");
-		String index = input.nextLine();
+		String index = input.nextLine().toUpperCase();
 		
 		// Invalid product key requested
 		if(!products.containsKey(index)) {
@@ -87,28 +87,40 @@ public class VendingMachine {
 		}
 		// Selected product is out of stock
 		else if(products.get(index).getStock() == 0) {
-			System.out.println("Item is out of stock. Sorry :( ");
+			System.out.println("Item is out of stock. Sorry :(");
 		}
 		// Product was already selected; increase stock of selections by one
 		else if (selections.containsKey(index)) {
+			// dispense product into selections
 			selections.get(index).setStock(selections.get(index).getStock() + 1);
 			products.get(index).setStock(products.get(index).getStock() - 1);
+			
+			System.out.println("Dispensing... " + products.get(index).getName());
+			
+			// format message to be passed to logger
+			String formattedLogMessage = String.format("%-20s$%.2f\t$%.2f", selections.get(index).getName() + " " + index,
+													   runningBalance, +(runningBalance - selections.get(index).getCost()));
 			// log transaction
-			vendingMachineLogger
-					.logMessage(String.format("%-20s$%.2f\t$%.2f", selections.get(index).getName() + " " + index,
-							runningBalance, +(runningBalance - selections.get(index).getCost())));
+			vendingMachineLogger.logMessage(formattedLogMessage);
+			// update running balance
 			runningBalance -= (selections.get(index).getCost());
 
 		} 
 		// if a new valid product selection, add product to selections
 		else {
+			// dispense product into selections
 			selections.put(index, new Product(products.get(index).getName(), products.get(index).getCost(),
-					products.get(index).getType(), 1));
+											  products.get(index).getType(), 1));
 			products.get(index).setStock(products.get(index).getStock() - 1);
+			
+			System.out.println("Dispensing... " + products.get(index).getName());
+			
+			// format message to pass to logger
+			String formattedLogMessage = String.format("%-20s$%.2f\t$%.2f", selections.get(index).getName() + " " + index,
+													   runningBalance, +(runningBalance - selections.get(index).getCost()));
 			// log transaction
-			vendingMachineLogger
-					.logMessage(String.format("%-20s$%.2f\t$%.2f", selections.get(index).getName() + " " + index,
-							runningBalance, +(runningBalance - selections.get(index).getCost())));
+			vendingMachineLogger.logMessage(formattedLogMessage);
+			// update running balance
 			runningBalance -= (selections.get(index).getCost());
 		}
 	}
@@ -118,15 +130,18 @@ public class VendingMachine {
 		System.out.println("Please feed money in increments (1, 2, 5, 10): ");
 		Scanner feeder = new Scanner(System.in);
 		String dollaBill = feeder.nextLine();
+		
 		// Only accept legitimate currency as requested
 		if(!dollaBill.equals("1") && !dollaBill.equals("2") && !dollaBill.equals("5") && !dollaBill.equals("10")) {
 			System.out.println("Not a valid dollar amount. Try again.");
 			feedMoney(); return;
 		}
+		
 		// Updated money tendered and the running balance
 		double currentTendered = Double.parseDouble(dollaBill);
 		moneyTendered += Double.parseDouble(dollaBill);
 		runningBalance += currentTendered;
+		
 		// log transaction
 		vendingMachineLogger
 				.logMessage(String.format("%-20s$%.2f" + "\t$%.2f", "Feed Money:", currentTendered, runningBalance));
@@ -134,22 +149,25 @@ public class VendingMachine {
 
 	// Calculate all purchases and dispense difference back to customer
 	public void finishTransaction() {
-
 		double totalCost = 0;
 		double change;
+		
+		// sum total cost of purchases and output transaction
 		for (String prod : selections.keySet()) {
 			totalCost += selections.get(prod).getCost() * selections.get(prod).getStock();
 		}
 		change = moneyTendered - totalCost;
-		System.out.print("Money Tender: " + moneyTendered + "\nTotal Cost: " + totalCost + "\nChange: "
-				+ makeChange(change) + "\n");
+		System.out.print("Money Tender: " + moneyTendered + "\nTotal Cost: " + totalCost + "\nChange: " + makeChange(change) + "\n");
 
 		// Customer eats all purchased products immediately for instant gratification
 		productsConsumed();
+		
 		// create log file
 		vendingMachineLogger.printToLogFile();
+		
 		// create sales report
 		salesReport();
+		
 		// set transaction data to zero state following completion
 		moneyTendered = 0;
 		selections.clear();
@@ -161,15 +179,17 @@ public class VendingMachine {
 		int coins = (Double.parseDouble(Integer.toString((int) (change * 100))) == change * 100.0)
 				? (int) (change * 100)
 				: (int) (change * 100) + 1;
+		
 		int quarters = 0;
 		int dimes = 0;
 		int nickels = 0;
+		
+		// convert change into coin units and return
 		quarters = (int) (coins / 25);
 		coins %= 25;
 		dimes = (int) (coins / 10);
 		coins %= 10;
 		nickels = (int) (coins / 5);
-
 		return quarters + " Quarters, " + dimes + " Dimes, " + nickels + " Nickels";
 
 	}
